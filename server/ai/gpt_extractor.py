@@ -5,7 +5,9 @@ import re
 from dotenv import load_dotenv
 
 load_dotenv()
-client = openai.OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+import os
+api_key = os.getenv("OPENAI_API_KEY")
+client = openai.OpenAI(api_key=api_key)
 
 def extract_with_gpt(text: str) -> dict:
     prompt = f"""

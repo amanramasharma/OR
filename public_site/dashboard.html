@@ -1,0 +1,261 @@
+<!-- Save as public_site/dashboard.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard | OptiResume</title>
+  <link rel="stylesheet" href="/site/css/style.css" />
+  <link rel="icon" href="/site/images/favicon.png" type="image/png" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@3.4.0/fonts/remixicon.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --blue: #2563eb;
+      --dark: #1e293b;
+      --gray: #f1f5f9;
+      --white: #ffffff;
+      --light-border: #e2e8f0;
+    }
+    body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      background: var(--gray);
+      display: flex;
+      min-height: 100vh;
+    }
+    .sidebar {
+      width: 240px;
+      background: var(--dark);
+      color: var(--white);
+      padding: 2rem 1rem;
+      display: flex;
+      flex-direction: column;
+    }
+    .sidebar .logo {
+      font-size: 1.5rem;
+      font-weight: bold;
+      margin-bottom: 2rem;
+      text-align: center;
+    }
+    .sidebar nav a {
+      display: flex;
+      align-items: center;
+      padding: 0.75rem 1rem;
+      margin-bottom: 0.5rem;
+      color: #cbd5e1;
+      text-decoration: none;
+      border-radius: 8px;
+      transition: 0.3s;
+    }
+    .sidebar nav a:hover,
+    .sidebar nav a.active {
+      background: #334155;
+      color: var(--white);
+    }
+    .sidebar nav a i {
+      margin-right: 10px;
+    }
+    .main {
+      flex: 1;
+      padding: 2rem;
+    }
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .header h1 {
+      margin: 0;
+      font-size: 1.5rem;
+      color: #1e293b;
+    }
+    .stats {
+      display: flex;
+      gap: 1.5rem;
+      margin: 2rem 0;
+    }
+    .stat {
+      background: var(--white);
+      padding: 1.5rem;
+      border-radius: 12px;
+      flex: 1;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+      border: 1px solid var(--light-border);
+    }
+    .stat h3 {
+      margin: 0;
+      font-size: 1rem;
+      color: #64748b;
+    }
+    .stat p {
+      font-size: 1.5rem;
+      font-weight: bold;
+      margin: 0.5rem 0 0;
+      color: #1e293b;
+    }
+
+    .upload-box {
+      background: var(--white);
+      padding: 2rem;
+      border-radius: 12px;
+      border: 2px dashed #cbd5e1;
+      text-align: center;
+      transition: 0.3s;
+    }
+    .upload-box:hover {
+      border-color: var(--blue);
+    }
+    .upload-box input {
+      display: none;
+    }
+    .upload-box label {
+      display: block;
+      cursor: pointer;
+      padding: 2rem;
+      color: #64748b;
+    }
+    .resume-list {
+      margin-top: 2rem;
+    }
+    .resume-card {
+      background: var(--white);
+      border: 1px solid var(--light-border);
+      padding: 1rem 1.5rem;
+      border-radius: 10px;
+      margin-bottom: 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .resume-card h4 {
+      margin: 0;
+      font-weight: 500;
+    }
+    .badge {
+      background: #e0f2fe;
+      color: #0284c7;
+      padding: 0.25rem 0.75rem;
+      border-radius: 6px;
+      font-size: 0.8rem;
+    }
+    .btn {
+      background-color: var(--blue);
+      color: white;
+      padding: 0.6rem 1.2rem;
+      border: none;
+      border-radius: 6px;
+      font-size: 1rem;
+      cursor: pointer;
+      margin-top: 1rem;
+    }
+    #selectedFile {
+      margin-top: 0.75rem;
+      color: #0f172a;
+      font-weight: 500;
+    }
+  </style>
+</head>
+<body>
+  <aside class="sidebar">
+    <div class="logo"><img src="/site/images/logo.png" alt="Logo" style="max-width: 160px;"></div>
+    <nav>
+      <a href="/site/dashboard.html" class="active"><i class="ri-dashboard-line"></i> Dashboard</a>
+      <a href="/my_uploads"><i class="ri-folder-line"></i> My Uploads</a>
+      <a href="/site/profile.html"><i class="ri-user-line"></i> Profile</a>
+      <a href="/logout"><i class="ri-logout-box-line"></i> Logout</a>
+    </nav>
+  </aside>
+
+  <main class="main">
+    <div class="header">
+      <h1 id="welcomeText">Welcome!</h1>
+    </div>
+
+<div class="stat">
+  <h3>Total Uploads</h3>
+  <p id="totalUploads">0</p>
+</div>
+<div class="stat">
+  <h3>Top Skill</h3>
+  <p id="topSkill">--</p>
+</div>
+
+    <form id="uploadForm">
+      <div class="upload-box">
+        <label for="resumeInput">
+          <i class="ri-upload-cloud-2-line" style="font-size: 2rem;"></i><br/>
+          Drag or click to upload resume
+        </label>
+        <input type="file" id="resumeInput" name="resume" accept=".pdf,.docx,.png,.jpg" required />
+        <p id="selectedFile"></p>
+      </div>
+
+<button id="submitBtn" type="submit" class="btn">Analyze Resume</button>
+    </form>
+
+    
+  </main>
+
+  <script>
+    const resumeInput = document.getElementById("resumeInput")
+    const selectedFile = document.getElementById("selectedFile")
+    const submitBtn = document.getElementById("submitBtn")
+
+    resumeInput.addEventListener("change", () => {
+      const file = resumeInput.files[0]
+      if (file) {
+        selectedFile.textContent = `Selected: ${file.name}`
+        submitBtn.style.display = "inline-block"
+      } else {
+        selectedFile.textContent = ""
+        submitBtn.style.display = "none"
+      }
+    })
+
+    document.getElementById("uploadForm").addEventListener("submit", async function(e) {
+      e.preventDefault()
+      const file = resumeInput.files[0]
+      if (!file) return
+      const formData = new FormData()
+      formData.append("resume", file)
+      const res = await fetch("/upload_resume", {
+        method: "POST",
+        body: formData,
+        credentials: "include"
+      })
+      if (res.redirected) window.location.href = res.url
+    })
+
+    fetch("/my_uploads", { credentials: "include" })
+      .then((res) => res.text())
+      .then((html) => {
+        const parser = new DOMParser()
+        const doc = parser.parseFromString(html, "text/html")
+        const rows = doc.querySelectorAll("tr.upload-row")
+        const recent = document.getElementById("recentResumes")
+        const scores = []
+
+        document.getElementById("totalUploads").textContent = rows.length
+
+        rows.forEach((row) => {
+          const name = row.children[0].textContent
+          const date = row.children[1].textContent
+          const score = row.children[2]?.textContent?.match(/\d+/)?.[0]
+          if (score) scores.push(+score)
+
+          const div = document.createElement("div")
+          div.className = "resume-card"
+          div.innerHTML = `<h4>${name}</h4><span class="badge">${score || "--"} / 100</span>`
+          recent.appendChild(div)
+        })
+
+        if (scores.length) {
+          const total = scores.reduce((a, b) => a + b, 0)
+          document.getElementById("bestScore").textContent = Math.max(...scores)
+          document.getElementById("avgScore").textContent = Math.round(total / scores.length)
+        }
+      })
+  </script>
+</body>
+</html>

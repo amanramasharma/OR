@@ -1,0 +1,92 @@
+* {
+  scroll-behavior: smooth;
+}
+#mobileMenu {
+  transition: right 0.5s ease-in-out;
+}
+
+.right-0 {
+  right: 0;
+}
+
+.-right-full {
+  right: -100%;
+}
+
+.btn-hover svg {
+  color: #1b1c1e;
+  margin-top: 3px;
+}
+.btn-hover:hover {
+  background-color: #1b1c1e;
+}
+.btn-hover:hover span,
+.btn-hover:hover svg {
+  color: #fff;
+}
+[id^="accordion"] {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.2s ease-out;
+}
+
+[id^="accordion"]:not(.hidden) {
+  max-height: 500px;
+}
+button svg {
+  transition: transform 0.2s ease-out;
+}
+
+.border-shadow {
+  border: 1px solid rgb(27, 28, 30);
+  box-shadow: 3px 3px 0px rgb(0, 0, 0);
+}
+
+.testimonial-content,
+.testimonial-images {
+  position: relative;
+  overflow: hidden;
+}
+
+.testimonial-slide,
+.testimonial-image {
+  opacity: 0;
+  position: absolute;
+  transition: opacity 0.5s ease-in-out;
+  pointer-events: none;
+}
+
+.testimonial-slide.active,
+.testimonial-image.active {
+  opacity: 1;
+  position: relative;
+  pointer-events: auto;
+}
+
+.prev-slide:hover,
+.next-slide:hover {
+  opacity: 0.7;
+}
+
+.textone-overlay::after {
+  content: "";
+  background: url("../images/text-overlay.svg");
+  position: absolute;
+  width: 207px;
+  height: 200px;
+  top: 35px;
+  right: 0;
+  z-index: -1;
+  background-repeat: no-repeat;
+}
+.texttwo-overlay::after {
+  content: "";
+  background: url("../images/texttwo-overlay.svg");
+  position: absolute;
+  width: 174px;
+  height: 200px;
+  top: 20px;
+  right: 8px;
+  z-index: -1;
+  background-repeat: no-repeat;
+}

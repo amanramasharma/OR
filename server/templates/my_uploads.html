@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>My Uploads | OptiResume</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="/site/css/style.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@3.4.0/fonts/remixicon.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      background: #f9f9f9;
+      display: flex;
+    }
+    .layout {
+      display: flex;
+      width: 100%;
+      height: 100vh;
+    }
+    .sidebar {
+      width: 240px;
+      background-color: #1e293b;
+      color: white;
+      padding: 2rem 1rem;
+      display: flex;
+      flex-direction: column;
+    }
+    .sidebar .logo {
+      font-size: 1.5rem;
+      font-weight: bold;
+      margin-bottom: 2rem;
+      text-align: center;
+    }
+    .sidebar nav a {
+      display: flex;
+      align-items: center;
+      padding: 0.75rem 1rem;
+      margin-bottom: 0.5rem;
+      color: #cbd5e1;
+      text-decoration: none;
+      border-radius: 8px;
+      transition: 0.3s;
+    }
+    .sidebar nav a i {
+      margin-right: 10px;
+      font-size: 1.2rem;
+    }
+    .sidebar nav a:hover,
+    .sidebar nav a.active {
+      background-color: #334155;
+      color: white;
+    }
+    .content {
+      flex: 1;
+      padding: 2rem;
+      overflow-y: auto;
+    }
+    .card {
+      background: white;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    }
+    h1 {
+      margin-top: 0;
+      font-size: 1.75rem;
+    }
+    table {
+      width: 100%;
+      margin-top: 1rem;
+      border-collapse: collapse;
+    }
+    th, td {
+      padding: 0.75rem 1rem;
+      text-align: left;
+      border-bottom: 1px solid #e2e8f0;
+    }
+    th {
+      background-color: #f3f4f6;
+      color: #475569;
+      font-weight: 600;
+    }
+    .btn-view {
+      background: #2563eb;
+      color: white;
+      padding: 0.4rem 1rem;
+      border-radius: 6px;
+      font-size: 0.9rem;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="logo">OptiResume</div>
+      <nav>
+        <a href="/site/dashboard.html"><i class="ri-dashboard-line"></i> Dashboard</a>
+        <a href="/my_uploads" class="active"><i class="ri-folder-line"></i> My Uploads</a>
+        <a href="/site/profile.html"><i class="ri-user-line"></i> Profile</a>
+        <a href="/logout"><i class="ri-logout-box-line"></i> Logout</a>
+      </nav>
+    </aside>
+
+    <main class="content">
+      <div class="card">
+        <h1>My Uploaded Resumes</h1>
+        {% if uploads %}
+        <table>
+          <thead>
+            <tr>
+              <th>File Name</th>
+              <th>Uploaded At</th>
+              <th>Score</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for item in uploads %}
+            <tr class="upload-row">
+              <td>{{ item.file_name }}</td>
+              <td>{{ item.uploaded_at[:10] }}</td>
+              <td>{{ item.resume_score or '--' }} / 100</td>
+              <td>
+                <a href="/view_resume/{{ item._id }}">
+                  <button class="btn-view">View</button>
+                </a>
+              </td>
+              <td class="skills" style="display:none;">
+                {{ ", ".join(item.skills) if item.skills else "" }}
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        {% else %}
+        <p style="margin-top: 2rem; color: #64748b;">No uploads found.</p>
+        {% endif %}
+      </div>
+    </main>
+  </div>
+</body>
+</html>

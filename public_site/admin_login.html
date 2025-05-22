@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Admin Login | OptiResume</title>
+  <link rel="stylesheet" href="/site/css/login_style.css" />
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #f8fafc;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .box {
+      background: white;
+      padding: 2rem 2.5rem;
+      border-radius: 10px;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+      max-width: 400px;
+      width: 100%;
+    }
+    h2 {
+      text-align: center;
+      margin-bottom: 1.5rem;
+    }
+    input {
+      width: 100%;
+      margin-bottom: 1rem;
+      padding: 0.75rem;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+    }
+    button {
+      width: 100%;
+      padding: 0.75rem;
+      background: #2563eb;
+      color: white;
+      font-weight: bold;
+      border: none;
+      border-radius: 6px;
+    }
+    .error {
+      color: red;
+      text-align: center;
+      margin-top: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="box">
+    <h2>Admin Login</h2>
+    <form id="adminLoginForm">
+      <input type="text" name="username" placeholder="Admin Username" required />
+      <input type="password" name="password" placeholder="Password" required />
+      <button type="submit">Login</button>
+      <p class="error" id="errorMsg"></p>
+    </form>
+  </div>
+
+  <script>
+    document.getElementById("adminLoginForm").addEventListener("submit", async function(e) {
+      e.preventDefault()
+      const formData = new FormData(this)
+      const res = await fetch("/admin_login", {
+        method: "POST",
+        body: formData,
+        credentials: "include"
+      })
+      const json = await res.json()
+      if (json.success) {
+        window.location.href = "/site/admin.html"
+      } else {
+        document.getElementById("errorMsg").textContent = json.message
+      }
+    })
+  </script>
+</body>
+</html>

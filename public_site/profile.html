@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>User Profile | OptiResume</title>
+  <link rel="stylesheet" href="/site/css/style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@3.4.0/fonts/remixicon.css" />
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      background: #f1f5f9;
+      display: flex;
+    }
+    .layout {
+      display: flex;
+      width: 100%;
+      height: 100vh;
+    }
+    .sidebar {
+      width: 240px;
+      background-color: #1e293b;
+      color: white;
+      padding: 2rem 1rem;
+      display: flex;
+      flex-direction: column;
+    }
+    .sidebar .logo {
+      font-size: 1.5rem;
+      font-weight: bold;
+      margin-bottom: 2rem;
+      text-align: center;
+    }
+    .sidebar nav a {
+      display: flex;
+      align-items: center;
+      padding: 0.75rem 1rem;
+      margin-bottom: 0.5rem;
+      color: #cbd5e1;
+      text-decoration: none;
+      border-radius: 8px;
+      transition: 0.3s;
+    }
+    .sidebar nav a i {
+      margin-right: 10px;
+      font-size: 1.2rem;
+    }
+    .sidebar nav a:hover,
+    .sidebar nav a.active {
+      background-color: #334155;
+      color: white;
+    }
+    .content {
+      flex: 1;
+      padding: 2rem;
+      overflow-y: auto;
+    }
+    .profile-box {
+      background: white;
+      max-width: 600px;
+      margin: auto;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    }
+    h2 {
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+      color: #1e293b;
+    }
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+    label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      color: #1e293b;
+    }
+    input {
+      width: 100%;
+      padding: 0.6rem;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      font-size: 1rem;
+    }
+    button {
+      background-color: #2563eb;
+      color: white;
+      padding: 0.6rem 1.2rem;
+      border: none;
+      border-radius: 6px;
+      font-weight: 500;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #1d4ed8;
+    }
+    #status {
+      margin-top: 1rem;
+      font-size: 0.95rem;
+      color: #16a34a;
+    }
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="logo">OptiResume</div>
+      <nav>
+        <a href="/site/dashboard.html"><i class="ri-dashboard-line"></i> Dashboard</a>
+<a href="/my_uploads"><i class="ri-folder-line"></i> My Uploads</a>        <a href="/site/profile.html" class="active"><i class="ri-user-line"></i> Profile</a>
+        <a href="/logout"><i class="ri-logout-box-line"></i> Logout</a>
+      </nav>
+    </aside>
+
+    <main class="content">
+      <div class="profile-box">
+        <h2>Your Profile</h2>
+        <form id="profileForm">
+          <div class="form-group">
+            <label for="username">Full Name</label>
+            <input id="username" name="username" />
+          </div>
+
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input id="email" name="email" />
+          </div>
+
+          <div class="form-group">
+            <label for="password">Password</label>
+            <input id="password" name="password" type="password" />
+          </div>
+
+          <button type="submit">Update Profile</button>
+          <p id="status"></p>
+        </form>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    fetch("/profile", { credentials: "include" })
+      .then(res => res.json())
+      .then(data => {
+        document.getElementById("username").value = data.username || "";
+        document.getElementById("email").value = data.email || "";
+        document.getElementById("password").value = data.password || "";
+      });
+
+    document.getElementById("profileForm").addEventListener("submit", async function (e) {
+      e.preventDefault();
+      const form = e.target;
+      const formData = new FormData(form);
+      const res = await fetch("/update_profile", {
+        method: "POST",
+        body: formData,
+        credentials: "include"
+      });
+      const json = await res.json();
+      document.getElementById("status").textContent = json.message || "Profile updated!";
+    });
+  </script>
+</body>
+</html>

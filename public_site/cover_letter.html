@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Cover Letter Generator | OptiResume</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" href="/site/images/favicon.png" type="image/png" />
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      background: #F9F9F9;
+      color: #1B1C1E;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 60px auto;
+      background: white;
+      padding: 40px;
+      border-radius: 12px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      margin-bottom: 40px;
+      text-decoration: none;
+    }
+
+    .logo img {
+      width: 40px;
+      height: 40px;
+      margin-right: 10px;
+    }
+
+    .logo span {
+      font-size: 22px;
+      font-weight: bold;
+      color: #1B1C1E;
+    }
+
+    h1 {
+      font-size: 28px;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+
+    p.subtitle {
+      font-size: 15px;
+      color: #555;
+      margin-bottom: 30px;
+    }
+
+    label {
+      font-weight: 600;
+      margin-bottom: 8px;
+      display: block;
+    }
+
+    input[type="file"],
+    input[type="text"] {
+      width: 100%;
+      padding: 12px;
+      font-size: 14px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      margin-bottom: 20px;
+    }
+
+    button {
+      background: #FF9A66;
+      color: #1B1C1E;
+      padding: 12px 28px;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    button:hover {
+      background: #f08545;
+    }
+
+    #loadingText {
+      font-size: 14px;
+      color: #888;
+      margin-top: 10px;
+    }
+
+    #output {
+      margin-top: 30px;
+    }
+
+    #output h3 {
+      font-size: 18px;
+      margin-bottom: 12px;
+    }
+
+    #outputText {
+      background: #F3F4F6;
+      padding: 16px;
+      border-radius: 8px;
+      white-space: pre-wrap;
+      font-size: 14px;
+      color: #1B1C1E;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <a href="/site/index.html" class="logo">
+      <img src="/site/images/logo.png" alt="OptiResume" height="40" />
+      <span>OptiResume</span>
+    </a>
+
+    <h1>AI Cover Letter Generator</h1>
+    <p class="subtitle">Upload your resume and enter the job role to instantly generate a tailored cover letter.</p>
+
+    <form id="coverForm">
+      <label for="job">Job Title / Role</label>
+      <input type="text" id="job" name="job" placeholder="e.g. Software Engineer at Amazon" required />
+
+      <label for="resume">Upload Resume</label>
+      <input type="file" name="resume" id="resume" accept=".pdf,.docx,.doc" required />
+
+      <button type="submit">Generate Cover Letter</button>
+      <p id="loadingText" style="display:none;">Generating your cover letter, please wait...</p>
+    </form>
+
+    <div id="output" style="display:none;">
+      <h3>Your Cover Letter</h3>
+      <div id="outputText"></div>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById("coverForm").addEventListener("submit", async function (e) {
+      e.preventDefault();
+      const loading = document.getElementById("loadingText");
+      const output = document.getElementById("output");
+      const outputText = document.getElementById("outputText");
+
+      const job = document.getElementById("job").value.trim();
+      const file = document.getElementById("resume").files[0];
+
+      if (!job || !file) return alert("Please provide both job title and resume.");
+
+      const formData = new FormData();
+      formData.append("job", job);
+      formData.append("resume", file);
+
+      loading.style.display = "block";
+      output.style.display = "none";
+
+      try {
+        const res = await fetch("/generate_cover_letter", {
+          method: "POST",
+          body: formData,
+          credentials: "include"
+        });
+
+        const data = await res.json();
+        loading.style.display = "none";
+
+        outputText.textContent = data.cover_letter || "No content generated.";
+        output.style.display = "block";
+      } catch (err) {
+        loading.style.display = "none";
+        alert("Something went wrong. Please try again.");
+        console.error(err);
+      }
+    });
+  </script>
+</body>
+</html>

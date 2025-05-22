@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Career Advice | OptiResume</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" href="/site/images/favicon.png" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@3.4.0/fonts/remixicon.css" rel="stylesheet" />
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      font-family: 'Inter', sans-serif;
+      box-sizing: border-box;
+    }
+    body {
+      background: #f9fafb;
+      color: #1B1C1E;
+      padding: 40px;
+    }
+    .container {
+      max-width: 750px;
+      margin: 0 auto;
+      background: white;
+      padding: 40px;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    }
+    .logo {
+      font-size: 28px;
+      font-weight: 700;
+      text-align: center;
+      margin-bottom: 40px;
+      color: #1B1C1E;
+      text-decoration: none;
+    }
+    .logo img {
+      height: 40px;
+      vertical-align: middle;
+      margin-right: 10px;
+    }
+    h2 {
+      font-size: 22px;
+      margin-bottom: 20px;
+    }
+    label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 6px;
+      margin-top: 20px;
+    }
+    textarea, input {
+      width: 100%;
+      padding: 12px;
+      border-radius: 8px;
+      border: 1px solid #d1d5db;
+      font-size: 15px;
+      margin-bottom: 10px;
+    }
+    button {
+      background: #FF9A66;
+      color: #1B1C1E;
+      border: none;
+      padding: 14px 28px;
+      font-weight: 600;
+      font-size: 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-top: 20px;
+      transition: background 0.3s ease;
+    }
+    button:hover {
+      background: #ff7f38;
+    }
+    .response-box {
+      margin-top: 30px;
+      padding: 20px;
+      background: #f3f4f6;
+      border-radius: 10px;
+      white-space: pre-line;
+    }
+  </style>
+</head>
+<body>
+  <a href="/site/index.html" class="logo">
+    <img src="/site/images/logo.png" alt="OptiResume" /> OptiResume
+  </a>
+
+  <div class="container">
+    <h2>AI-Powered Career Advice</h2>
+    <p style="margin-bottom: 20px; color: #4b5563;">Describe your career concerns or ask a specific question, and our AI will help you navigate your professional journey.</p>
+
+    <form id="careerForm">
+      <label for="question">Your Question / Situation</label>
+      <textarea id="question" name="question" rows="6" placeholder="e.g. I'm a software developer looking to move into a managerial role. What should I focus on?" required></textarea>
+
+      <button type="submit">Get Career Advice</button>
+    </form>
+
+    <div id="response" class="response-box" style="display: none;"></div>
+  </div>
+
+  <script>
+    const form = document.getElementById("careerForm");
+    const responseBox = document.getElementById("response");
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const question = document.getElementById("question").value;
+
+      responseBox.style.display = "block";
+      responseBox.textContent = "⏳ Thinking...";
+
+      try {
+        const res = await fetch("/career_advice", {
+          method: "POST",
+          body: new URLSearchParams({ question }),
+        });
+
+        if (res.ok) {
+          const data = await res.json();
+          responseBox.textContent = data.answer || "No advice returned.";
+        } else {
+          responseBox.textContent = "❌ Failed to get a response.";
+        }
+      } catch (err) {
+        responseBox.textContent = "❌ Something went wrong.";
+        console.error(err);
+      }
+    });
+  </script>
+</body>
+</html>

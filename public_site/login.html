@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="shortcut icon" href="/site/images/favicon.png" type="image/x-icon">
+  <link rel="icon" href="/site/images/favicon.png">
+  <title>OptiResume - Login</title>
+  <link rel="stylesheet" href="/site/css/login_style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <div class="login-container">
+    <a href="/site/index.html"><img src="/site/images/logo.png" alt="Logo" class="logo"></a>
+    <h2>Login to Your Account</h2>
+    <form id="loginForm">
+      <div class="input-group">
+        <input type="email" name="email" placeholder="Email" required>
+      </div>
+      <div class="input-group">
+        <input type="password" name="password" placeholder="Password" required>
+      </div>
+      <a href="#" class="forgot-password">Forgot Password?</a>
+      <button type="submit" class="login-btn">Login</button>
+    </form>
+    <div class="signup-text">
+      Don't have an account? <a href="/site/signup.html">Sign Up</a>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById("loginForm").addEventListener("submit", async function(e) {
+      e.preventDefault();
+      const form = e.target;
+      const formData = new FormData(form);
+      try {
+        const response = await fetch("/login", {
+          method: "POST",
+          body: formData,
+          credentials: "include"
+        });
+
+        if (response.redirected) {
+          window.location.href = response.url;
+        } else {
+          const error = await response.text();
+          alert("Login failed: " + error);
+        }
+      } catch (err) {
+        console.error("Login error:", err);
+        alert("An error occurred. Please try again.");
+      }
+    });
+  </script>
+</body>
+</html>

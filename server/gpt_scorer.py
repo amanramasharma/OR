@@ -2,9 +2,8 @@ import openai
 import os
 import json
 import re
-from dotenv import load_dotenv
 
-load_dotenv()
+api_key = os.getenv("OPENAI_API_KEY")
 client = openai.OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 def get_gpt_score(data: dict) -> dict:

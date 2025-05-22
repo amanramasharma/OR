@@ -18,7 +18,7 @@ from fastapi.responses import JSONResponse
 from dotenv import load_dotenv
 from openai import OpenAI
 import openai
-load_dotenv()
+
 client = openai.OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 
